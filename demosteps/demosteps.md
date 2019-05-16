@@ -22,9 +22,15 @@ az acr credential show -g cadullacr -n cadullacr
 
 in folder ui:
 
-az acr build --registry cadullacr --image azcontoptions:v0.2 .
+az acr build --registry cadullacr --image azcontoptionsui:v0.4 .
 
 show in the portal, show "run instance" and "deploy in web app" in context menus, explain that this needs admin login enabled
+
+explain patching with acr tasks
+
+in folder worker:
+
+az acr build --registry cadullacr --image azcontoptionsworker:v0.4 .
 
 ### Use ACI to run a web image
 
@@ -49,3 +55,20 @@ show the taints and toleration thing:
 kubectl get node virtual-node-aci-linux
 kubectl get node virtual-node-aci-linux -o=jsonpath='{.spec.taints}'
 ```
+
+[Create Secret using kubectl](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-secret-by-providing-credentials-on-the-command-line)
+
+```sh
+kubectl create secret docker-registry regcred --docker-server=cadullacr.azurecr.io --docker-username=cadullacr --docker-password=<your-pword> --docker-email=cadullacr@azurecr.io
+```
+
+and then use it in yaml as described [here](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-pod-that-uses-your-secret).
+
+```sh
+kubectl apply -f .\factorial-worker.yaml
+```
+
+dann bisschen vekehr machen und im dashboard beobachten
+
+kubectl create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard
+az aks browse -n cadullvk -g cadullvk
