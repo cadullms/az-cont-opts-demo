@@ -1,3 +1,11 @@
+### Prep
+
+Create Storage queue
+
+az group create -n cadullq -l westeurope
+az storage account create -n cadullq -g cadullq --sku Standard_LRS
+az storage queue create --account-name cadullq --name cadullqazu 
+
 ### Use ACR to build our images
 
 https://docs.microsoft.com/en-us/learn/modules/build-and-store-container-images
