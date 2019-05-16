@@ -1,0 +1,16 @@
+﻿@model ui.Models.Request
+@{
+    ViewData["Title"] = "Send Request";
+}
+<h2>@ViewData["Title"]</h2>
+<h3>@ViewData["Message"]</h3>
+
+<p>
+    Enter an integer range like '1-122'.
+</p>
+
+<div asp-validation-summary="All"></div>
+<form action="/Request/Send" method="post">
+    <div>Range: <input asp-for="RequestMessage" /></div>
+    <input type="submit" />
+</form>
