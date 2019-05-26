@@ -10,12 +10,12 @@ az storage queue create --account-name cadullq --name cadullqazu
 
 ### Use ACR to build our images
 
-https://docs.microsoft.com/en-us/learn/modules/build-and-store-container-images
-https://github.com/Azure-Samples/acr-tasks
-https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tasks-reference-yaml
-https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-base-image-update
-https://blogs.msdn.microsoft.com/stevelasker/2017/12/20/os-framework-patching-with-docker-containers-paradigm-shift/
-https://stevelasker.blog/2018/03/01/docker-tagging-best-practices-for-tagging-and-versioning-docker-images/
+* https://docs.microsoft.com/en-us/learn/modules/build-and-store-container-images
+* https://github.com/Azure-Samples/acr-tasks
+* https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-base-image-update
+* https://blogs.msdn.microsoft.com/stevelasker/2017/12/20/os-framework-patching-with-docker-containers-paradigm-shift/
+* https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tasks-reference-yaml
+* https://stevelasker.blog/2018/03/01/docker-tagging-best-practices-for-tagging-and-versioning-docker-images/
 
 ```sh
 az group create -n cadullacr -l westeurope
