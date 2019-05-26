@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: azcontoptionsui
-        image: cadullacr.azurecr.io/azcontoptionsui:v0.5
+        image: cadullacr.azurecr.io/azcontoptionsui:v0.7
         ports:
         - containerPort: 80
         resources:
@@ -56,7 +56,7 @@ kind: Deployment
 metadata:
   name: azcontoptionsworker
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: azcontoptionsworker
@@ -67,7 +67,7 @@ spec:
     spec:
       containers:
       - name: azcontoptionsworker
-        image: cadullacr.azurecr.io/azcontoptionsworker:v0.5
+        image: cadullacr.azurecr.io/azcontoptionsworker:v0.7
         resources:
           limits:
             cpu: 50m

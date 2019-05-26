@@ -28,7 +28,7 @@ namespace worker
             Console.WriteLine("Starting...");
             while (true)
             {
-                Thread.Sleep(100);
+                Thread.Sleep(10);
                 Work().GetAwaiter().GetResult();
             }
         }

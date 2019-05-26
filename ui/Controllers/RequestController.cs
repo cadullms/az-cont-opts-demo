@@ -32,8 +32,11 @@ namespace ui.Controllers
         public async Task<IActionResult> Send([Bind("RequestMessage")]Request request)
         {
             ViewData["Message"] = $"Thanks for sending request '{request.RequestMessage}'";
-            await AddMessageToQueue(request.RequestMessage);
-            request.RequestMessage = "";
+            for (int i = 0; i < 15; i++)
+            {
+                await AddMessageToQueue(request.RequestMessage);
+            }
+            
             return View(request);
         }
 

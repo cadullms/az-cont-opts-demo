@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azcontoptionsworkernew
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: azcontoptionsworkernew
+  template:
+    metadata:
+      labels:
+        app: azcontoptionsworkernew
+    spec:
+      containers:
+      - name: azcontoptionsworkernew
+        image: cadullacr.azurecr.io/azcontoptionsworker:v0.7
+        resources:
+          limits:
+            cpu: 50m
+            memory: 200M
+        env:
+          - name: "queueConnectionString"
+            value: "DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=cadullq;AccountKey=Ng7a/cKs110uTCd5ca8W3cyP327/xDN67lB/cZhaWu5pOGM4R1WQjBkfBsOwoP4uFrbU3LBDUNaXitz3BQpncQ=="
+          - name: "queueName"
+            value: "cadullq"
