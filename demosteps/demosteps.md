@@ -2,9 +2,11 @@
 
 Create Storage queue
 
+```sh
 az group create -n cadullq -l westeurope
 az storage account create -n cadullq -g cadullq --sku Standard_LRS
 az storage queue create --account-name cadullq --name cadullqazu 
+```
 
 ### Use ACR to build our images
 
@@ -15,40 +17,41 @@ https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tut
 https://blogs.msdn.microsoft.com/stevelasker/2017/12/20/os-framework-patching-with-docker-containers-paradigm-shift/
 https://stevelasker.blog/2018/03/01/docker-tagging-best-practices-for-tagging-and-versioning-docker-images/
 
+```sh
 az group create -n cadullacr -l westeurope
 az acr create -g cadullacr -n cadullacr --sku Basic
 az acr update -n cadullacr --admin-enabled true
 az acr credential show -g cadullacr -n cadullacr
+```
 
-in folder ui:
+In folder ui:
 
+```sh
 az acr build --registry cadullacr --image azcontoptionsui:v0.4 .
+```
 
-show in the portal, show "run instance" and "deploy in web app" in context menus, explain that this needs admin login enabled
+* Show in the portal, show "run instance" and "deploy in web app" in context menus, explain that this needs admin login enabled.
+* Explain patching with acr tasks.
 
-explain patching with acr tasks
+In folder worker:
 
-in folder worker:
-
+```sh
 az acr build --registry cadullacr --image azcontoptionsworker:v0.4 .
+```
 
 ### Use ACI to run a web image
 
+Use context menu in one of the tags in ACR.
 
+### Use App Service to run a web image
 
-### x. Use ACI to run a background task
+Use context menu in one of the tags in ACR again. Then show how much more web specific features we have for Web App for Containers than for ACI. Mention as well that getting the logs out of the container is much harder here.
 
-az provider list --query "[?contains(namespace,'Microsoft.ContainerInstance')]" -o table
-az provider register --namespace Microsoft.ContainerInstance
-
-### x. Use Virtual Kubelet to scale AKS with ACI
+### Use Virtual Kubelet to scale AKS with ACI
 
 Follow steps in [Create and configure an Azure Kubernetes Services (AKS) cluster to use virtual nodes using the Azure CLI](https://docs.microsoft.com/en-us/azure/aks/virtual-nodes-cli)
 
-But...
-
-
-And...
+And then...
 
 show the taints and toleration thing:
 ```sh
@@ -67,8 +70,7 @@ and then use it in yaml as described [here](https://kubernetes.io/docs/tasks/con
 ```sh
 kubectl apply -f .\factorial-worker.yaml
 ```
-
-dann bisschen vekehr machen und im dashboard beobachten
+### Enable Dashboard
 
 kubectl create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard
 az aks browse -n cadullvk -g cadullvk
