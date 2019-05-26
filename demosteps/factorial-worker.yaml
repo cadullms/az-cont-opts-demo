@@ -36,7 +36,7 @@ spec:
             memory: 200M
         env:
           - name: "queueConnectionString"
-            value: "DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=cadullq;AccountKey=Ng7a/cKs110uTCd5ca8W3cyP327/xDN67lB/cZhaWu5pOGM4R1WQjBkfBsOwoP4uFrbU3LBDUNaXitz3BQpncQ=="
+            value: "DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=cadullq;AccountKey=[secret snipped]"
           - name: "queueName"
             value: "cadullq"
       imagePullSecrets:
@@ -74,7 +74,7 @@ spec:
             memory: 200M
         env:
           - name: "queueConnectionString"
-            value: "DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=cadullq;AccountKey=Ng7a/cKs110uTCd5ca8W3cyP327/xDN67lB/cZhaWu5pOGM4R1WQjBkfBsOwoP4uFrbU3LBDUNaXitz3BQpncQ=="
+            value: "DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=cadullq;AccountKey=[secret snipped]"
           - name: "queueName"
             value: "cadullq"
       imagePullSecrets:
