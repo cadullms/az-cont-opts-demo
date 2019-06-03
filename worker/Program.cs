@@ -47,8 +47,8 @@ namespace worker
             }
 
             // Default visibility timeout of 30 seconds
-            string message = queueMessage.AsString;
-            Console.WriteLine($"Got message '{message}'.");
+            var message = queueMessage.AsString;
+            Console.WriteLine($"Retrieved message '{message}'.");
             var messageMatch = _integerRangeRegex.Match(message);
             if (!messageMatch.Success)
             {
@@ -56,8 +56,8 @@ namespace worker
                 return;
             }
 
-            var from = int.Parse(messageMatch.Groups["from"].Value);
-            var to = int.Parse(messageMatch.Groups["to"].Value);
+            int.TryParse(messageMatch.Groups["from"].Value, out var from);
+            int.TryParse(messageMatch.Groups["to"].Value, out var to);
 
             if (from > to)
             {
@@ -68,21 +68,21 @@ namespace worker
             await queue.DeleteMessageAsync(queueMessage);
 
             Parallel.For(from, to + 1, (i) =>
-              {
-                  try
-                  {
-                      Console.WriteLine($"Computing {i}!");
-                      var result = CalculateFactorial(i);
-                      Console.WriteLine($"{i}!={result}.");
-                  }
-                  catch (Exception ex)
-                  {
-                      Console.WriteLine(ex.Message);
-                  }
-              });
+            {
+                try
+                {
+                    Console.WriteLine($"Computing {i}!");
+                    var result = CalculateFactorial(i);
+                    Console.WriteLine($"{i}!={result}.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            });
         }
 
-        private static Decimal CalculateFactorial(Decimal i)
+        private static decimal CalculateFactorial(decimal i)
         {
             if (i > 1)
             {
