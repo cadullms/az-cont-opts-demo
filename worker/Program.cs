@@ -30,7 +30,7 @@ namespace worker
             }
         }
 
-        private static Regex _integerRangeRegex = new Regex(@"(?<from>\d+)\-(?<to>\d+)");
+        private static Regex _integerRangeRegex = new Regex(@"(?<from>\d+)\-(?<to>\d+)", RegexOptions.Compiled);
 
         private static async Task Work()
         {
