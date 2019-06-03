@@ -17,7 +17,7 @@ namespace worker
             Console.WriteLine(basePath);
             _configuration = new ConfigurationBuilder()
                 .SetBasePath(basePath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
                 .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: false)
                 .AddEnvironmentVariables()
                 .Build();
