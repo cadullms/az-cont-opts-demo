@@ -1,26 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
+using System.Threading.Tasks;
 using ui.Models;
-
 namespace ui.Controllers
 {
     public class RequestController : Controller
     {
-
         private IConfiguration _configuration;
 
         public RequestController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
-
 
         public IActionResult Index()
         {
@@ -52,6 +45,5 @@ namespace ui.Controllers
             var queueMessage = new CloudQueueMessage(message);
             await queue.AddMessageAsync(queueMessage);
         }
-
     }
 }

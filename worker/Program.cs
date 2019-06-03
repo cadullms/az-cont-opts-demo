@@ -1,17 +1,14 @@
-﻿using System;
-using Microsoft.Extensions.Configuration;
-using System.IO;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Queue;
-using System.Threading;
+using System;
+using System.IO;
 using System.Text.RegularExpressions;
-
+using System.Threading;
+using System.Threading.Tasks;
 namespace worker
 {
     class Program
     {
-
         private static IConfiguration _configuration;
 
         public static void Main(string[] args)
@@ -83,7 +80,6 @@ namespace worker
                       Console.WriteLine(ex.Message);
                   }
               });
-
         }
 
         private static Decimal CalculateFactorial(Decimal i)
@@ -97,6 +93,5 @@ namespace worker
                 return 1;
             }
         }
-
     }
 }
