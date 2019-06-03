@@ -1,3 +1,3 @@
-docker build -t ui:dev -f ui/Dockerfile ui
+docker build -t ui:latest -f ui/Dockerfile ui
 
 pause

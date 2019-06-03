@@ -1,3 +1,3 @@
-docker run --name ui --rm -it ui:dev
+docker run --name ui --rm -it ui:latest
 
 pause

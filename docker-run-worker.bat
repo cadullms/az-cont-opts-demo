@@ -1,3 +1,3 @@
-docker run --name worker --rm -it worker:dev
+docker run --name worker --rm -it worker:latest
 
 pause

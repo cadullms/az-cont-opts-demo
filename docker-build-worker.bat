@@ -1,3 +1,3 @@
-docker build -t worker:dev -f worker/Dockerfile worker
+docker build -t worker:latest -f worker/Dockerfile worker
 
 pause
