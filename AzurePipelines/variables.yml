@@ -1,0 +1,4 @@
+variables:
+  Azure.ServiceConnectionId: AzRMSvcConnection    #change to your own service connection
+  ACR.FullName: azcontoptsdemo99.azurecr.io       #change to your own ACR
+  repoAndtag: $(imageName):$(Build.BuildNumber)   #$(Build.BuildId)
