@@ -11,7 +11,7 @@ namespace worker
     {
         private static IConfiguration _configuration;
 
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
             var basePath = Directory.GetCurrentDirectory();
             Console.WriteLine(basePath);
@@ -26,7 +26,7 @@ namespace worker
             while (true)
             {
                 Thread.Sleep(10);
-                Work().GetAwaiter().GetResult();
+                await Work();
             }
         }
 
