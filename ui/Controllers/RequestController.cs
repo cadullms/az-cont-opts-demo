@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
+using StackExchange.Redis;
+using System;
 using System.Threading.Tasks;
 using ui.Models;
 namespace ui.Controllers
@@ -9,10 +11,12 @@ namespace ui.Controllers
     public class RequestController : Controller
     {
         private IConfiguration _configuration;
+        private IConnectionMultiplexer _connectionMultiplexer;
 
-        public RequestController(IConfiguration configuration)
+        public RequestController(IConfiguration configuration, IConnectionMultiplexer multiplexer)
         {
             _configuration = configuration;
+            _connectionMultiplexer = multiplexer;
         }
 
         public IActionResult Index()
@@ -24,12 +28,17 @@ namespace ui.Controllers
         [HttpPost]
         public async Task<IActionResult> Send([Bind("RequestMessage")]Request request)
         {
-            ViewData["Message"] = $"Thanks for sending request '{request.RequestMessage}'";
+            //var redis = _connectionMultiplexer.GetDatabase();
+
+            var msg = $"Thanks for sending request '{request.RequestMessage}' @ {DateTime.UtcNow}";
+            ViewData["Message"] = msg;
             for (int i = 0; i < 15; i++)
             {
                 await AddMessageToQueue(request.RequestMessage);
+
+                //await redis.StringSetAsync("RequestMessage.Key", msg);
             }
-            
+
             return View(request);
         }
 

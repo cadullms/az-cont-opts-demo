@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 namespace ui
 {
     public class Startup
@@ -26,6 +27,9 @@ namespace ui
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            var connectionStr = Configuration["redisConnectionString"];
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(connectionStr));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
