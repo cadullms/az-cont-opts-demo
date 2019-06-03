@@ -38,7 +38,7 @@ namespace ui
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
+                //app.UseHsts();
             }
 
             // app.UseHttpsRedirection();
