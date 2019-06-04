@@ -26,5 +26,3 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
       - azurite
-
-  
