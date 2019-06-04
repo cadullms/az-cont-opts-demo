@@ -23,25 +23,25 @@ namespace ui.Controllers
 
         public IActionResult Index()
         {
-            var request = new Request { RequestMessage = "1-100" };
+            var request = new RequestModel { RequestMessage = "default message", Count = 3 };
             return View(request);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Send([Bind("RequestMessage")]Request request)
+        public async Task<IActionResult> Send(RequestModel req)
         {
             //var redis = _connectionMultiplexer.GetDatabase();
 
-            var msg = $"Thanks for sending request '{request.RequestMessage}' @ {DateTime.UtcNow}";
-            ViewData["Message"] = msg;
-            for (var i = 0; i < 15; i++)
+            req.RequestMessage = $"Thanks for sending a request @ {DateTime.UtcNow}";
+            ViewData["Message"] = req.RequestMessage;
+            for (var i = 1; i <= req.Count; i++)
             {
-                await AddMessageToQueue(request.RequestMessage);
-
+                var msg = $"{req.RequestMessage} ({i} of {req.Count})";
+                await AddMessageToQueue(msg);
                 //await redis.StringSetAsync("RequestMessage.Key", msg);
             }
 
-            return View(request);
+            return View(req);
         }
 
         private async Task AddMessageToQueue(string message)
@@ -55,8 +55,6 @@ namespace ui.Controllers
             await queue.CreateIfNotExistsAsync();
             var queueMessage = new CloudQueueMessage(message);
             await queue.AddMessageAsync(queueMessage);
-
-            await queue.bat
         }
     }
 }

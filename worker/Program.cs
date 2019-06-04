@@ -25,7 +25,7 @@ namespace worker
             Console.WriteLine("Starting...");
             while (true)
             {
-                Thread.Sleep(10);
+                Thread.Sleep(1_000);
                 await Work();
             }
         }
@@ -43,6 +43,7 @@ namespace worker
             var queueMessage = await queue.GetMessageAsync();
             if (queueMessage == null)
             {
+                Console.WriteLine($"queue is empty...");
                 return;
             }
 

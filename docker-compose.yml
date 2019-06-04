@@ -17,24 +17,14 @@ services:
       - "8080:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    # links:
-    #   - azurite
-      #- redis
     depends_on:
       - azurite
-      #- redis
 
-  # worker:
-  #   build: worker
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-  #   links:
-  #     #- redis
-  #     - azurite
-  # redis:
-  #   image: "redis:alpine"
-  #   ports:
-  #     - "6379:6379"
-  
+  worker:
+    build: worker
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - azurite
 
   

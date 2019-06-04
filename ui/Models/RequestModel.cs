@@ -1,9 +1,8 @@
-using System;
-
 namespace ui.Models
 {
-    public class Request
+    public class RequestModel
     {
         public string RequestMessage { get; set; }
+        public int Count { get; set; }
     }
 }
