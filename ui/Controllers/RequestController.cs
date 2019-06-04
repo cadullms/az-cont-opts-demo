@@ -34,7 +34,7 @@ namespace ui.Controllers
 
             var msg = $"Thanks for sending request '{request.RequestMessage}' @ {DateTime.UtcNow}";
             ViewData["Message"] = msg;
-            for (int i = 0; i < 15; i++)
+            for (var i = 0; i < 15; i++)
             {
                 await AddMessageToQueue(request.RequestMessage);
 
@@ -55,6 +55,8 @@ namespace ui.Controllers
             await queue.CreateIfNotExistsAsync();
             var queueMessage = new CloudQueueMessage(message);
             await queue.AddMessageAsync(queueMessage);
+
+            await queue.bat
         }
     }
 }
