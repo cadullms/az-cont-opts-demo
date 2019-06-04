@@ -28,8 +28,8 @@ namespace ui
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            var connectionStr = Configuration["redisConnectionString"];
-            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(connectionStr));
+            // var connectionStr = Configuration["redisConnectionString"];
+            // services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(connectionStr));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

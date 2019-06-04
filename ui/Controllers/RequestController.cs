@@ -11,12 +11,14 @@ namespace ui.Controllers
     public class RequestController : Controller
     {
         private IConfiguration _configuration;
-        private IConnectionMultiplexer _connectionMultiplexer;
+        //private IConnectionMultiplexer _connectionMultiplexer;
 
-        public RequestController(IConfiguration configuration, IConnectionMultiplexer multiplexer)
+        public RequestController(IConfiguration configuration
+            //, IConnectionMultiplexer multiplexer
+            )
         {
             _configuration = configuration;
-            _connectionMultiplexer = multiplexer;
+            //_connectionMultiplexer = multiplexer;
         }
 
         public IActionResult Index()
