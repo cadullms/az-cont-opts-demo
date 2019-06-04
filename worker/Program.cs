@@ -30,7 +30,7 @@ namespace worker
             }
         }
 
-        private static Regex _integerRangeRegex = new Regex(@"(?<from>\d+)\-(?<to>\d+)", RegexOptions.Compiled);
+        //private static Regex _integerRangeRegex = new Regex(@"(?<from>\d+)\-(?<to>\d+)", RegexOptions.Compiled);
 
         private static async Task Work()
         {
@@ -50,6 +50,7 @@ namespace worker
             // Default visibility timeout of 30 seconds
             var message = queueMessage.AsString;
             Console.WriteLine($"Retrieved message '{message}'.");
+            /*
             var messageMatch = _integerRangeRegex.Match(message);
             if (!messageMatch.Success)
             {
@@ -65,9 +66,10 @@ namespace worker
                 Console.WriteLine($"'{message}' is not a valid integer range. First value must be less or equal than second.");
                 return;
             }
-
+            */
             await queue.DeleteMessageAsync(queueMessage);
 
+            /*
             Parallel.For(from, to + 1, (i) =>
             {
                 try
@@ -81,6 +83,7 @@ namespace worker
                     Console.WriteLine(ex.Message);
                 }
             });
+            */
         }
 
         private static decimal CalculateFactorial(decimal i)
