@@ -1,16 +1,40 @@
 version: '3'
 services:
+  #azurite is the linux equivalent of Azure Storage Emulator Docker Image;
+  #https://hub.docker.com/r/microsoft/azure-storage-emulator/
+  #https://github.com/arafato/azurite
+  #https://hub.docker.com/r/arafato/azurite
+  azurite:
+    image: "arafato/azurite"
+    ports:
+      - "10000:10000" #blob
+      - "10001:10001" #queue
+      - "10002:10002" #table
+
   ui:
     build: ui
     ports:
       - "8080:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-  worker:
-    build: worker
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-  redis:
-    image: "redis:alpine"
-    ports:
-      - "13378:6379"
+    # links:
+    #   - azurite
+      #- redis
+    depends_on:
+      - azurite
+      #- redis
+
+  # worker:
+  #   build: worker
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #   links:
+  #     #- redis
+  #     - azurite
+  # redis:
+  #   image: "redis:alpine"
+  #   ports:
+  #     - "6379:6379"
+  
+
+  
