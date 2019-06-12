@@ -1,15 +1,15 @@
 version: '3'
 services:
-  #azurite is the linux equivalent of Azure Storage Emulator Docker Image;
+  #azurite is the linux equivalent of the Azure Storage Emulator Docker Image;
   #https://hub.docker.com/r/microsoft/azure-storage-emulator/
   #https://github.com/arafato/azurite
   #https://hub.docker.com/r/arafato/azurite
   azurite:
     image: "arafato/azurite"
     ports:
-      - "10000:10000" #blob
+      #- "10000:10000" #blob
       - "10001:10001" #queue
-      - "10002:10002" #table
+      #- "10002:10002" #table
 
   ui:
     build: ui

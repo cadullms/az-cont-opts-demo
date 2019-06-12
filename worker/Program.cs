@@ -1,15 +1,16 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using lib.Messages;
+using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
+using Newtonsoft.Json;
 using System;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 namespace worker
 {
     class Program
     {
-        private static IConfiguration _configuration;
+        static IConfiguration _configuration;
 
         public async static Task Main(string[] args)
         {
@@ -30,9 +31,7 @@ namespace worker
             }
         }
 
-        //private static Regex _integerRangeRegex = new Regex(@"(?<from>\d+)\-(?<to>\d+)", RegexOptions.Compiled);
-
-        private static async Task Work()
+        static async Task Work()
         {
             var connString = _configuration.GetValue<string>("queueConnectionString");
             var queueName = _configuration.GetValue<string>("queueName");
@@ -47,54 +46,42 @@ namespace worker
                 return;
             }
 
+            var json = queueMessage.AsString;
+
+            var msg = JsonConvert.DeserializeObject<RequestMessage>(json);
+
             // Default visibility timeout of 30 seconds
-            var message = queueMessage.AsString;
-            Console.WriteLine($"Retrieved message '{message}'.");
-            /*
-            var messageMatch = _integerRangeRegex.Match(message);
-            if (!messageMatch.Success)
-            {
-                Console.WriteLine($"'{message}' is not a valid integer range.");
-                return;
-            }
+            Console.WriteLine($"Retrieved message id {msg.RequestID}");
 
-            int.TryParse(messageMatch.Groups["from"].Value, out var from);
-            int.TryParse(messageMatch.Groups["to"].Value, out var to);
-
-            if (from > to)
-            {
-                Console.WriteLine($"'{message}' is not a valid integer range. First value must be less or equal than second.");
-                return;
-            }
-            */
+            // delete message from queue
             await queue.DeleteMessageAsync(queueMessage);
 
-            /*
-            Parallel.For(from, to + 1, (i) =>
-            {
-                try
-                {
-                    Console.WriteLine($"Computing {i}!");
-                    var result = CalculateFactorial(i);
-                    Console.WriteLine($"{i}!={result}.");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            });
-            */
-        }
+            // lets do some *slightly* intensive processing
+            ProcessMessage(msg);
 
-        private static decimal CalculateFactorial(decimal i)
-        {
-            if (i > 1)
+            void ProcessMessage(RequestMessage message)
             {
-                return CalculateFactorial(i - 1) * i;
+                Parallel.For(0, msg.Count + 1, (i) =>
+                {
+                    try
+                    {
+                        Console.WriteLine($"Computing {i}!");
+                        var result = CalculateFactorial(i);
+                        Console.WriteLine($"{i}!={result}.");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                });
             }
-            else
+
+            decimal CalculateFactorial(decimal i)
             {
-                return 1;
+                if (i > 1)
+                    return CalculateFactorial(i - 1) * i;
+                else
+                    return 1;
             }
         }
     }
