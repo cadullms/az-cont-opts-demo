@@ -1,26 +1,24 @@
-﻿using System;
+﻿using lib.Messages;
 using Microsoft.Extensions.Configuration;
-using System.IO;
-using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Queue;
+using Newtonsoft.Json;
+using System;
+using System.IO;
 using System.Threading;
-using System.Text.RegularExpressions;
-
+using System.Threading.Tasks;
 namespace worker
 {
     class Program
     {
+        static IConfiguration _configuration;
 
-        private static IConfiguration _configuration;
-
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
             var basePath = Directory.GetCurrentDirectory();
             Console.WriteLine(basePath);
             _configuration = new ConfigurationBuilder()
                 .SetBasePath(basePath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
                 .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: false)
                 .AddEnvironmentVariables()
                 .Build();
@@ -28,14 +26,12 @@ namespace worker
             Console.WriteLine("Starting...");
             while (true)
             {
-                Thread.Sleep(10);
-                Work().GetAwaiter().GetResult();
+                Thread.Sleep(2_000);
+                await Work();
             }
         }
 
-        private static Regex _integerRangeRegex = new Regex(@"(?<from>\d+)\-(?<to>\d+)");
-
-        private static async Task Work()
+        static async Task Work()
         {
             var connString = _configuration.GetValue<string>("queueConnectionString");
             var queueName = _configuration.GetValue<string>("queueName");
@@ -46,57 +42,47 @@ namespace worker
             var queueMessage = await queue.GetMessageAsync();
             if (queueMessage == null)
             {
+                Console.WriteLine($"queue is empty...");
                 return;
             }
+
+            var json = queueMessage.AsString;
+
+            var msg = JsonConvert.DeserializeObject<RequestMessage>(json);
 
             // Default visibility timeout of 30 seconds
-            string message = queueMessage.AsString;
-            Console.WriteLine($"Got message '{message}'.");
-            var messageMatch = _integerRangeRegex.Match(message);
-            if (!messageMatch.Success)
-            {
-                Console.WriteLine($"'{message}' is not a valid integer range.");
-                return;
-            }
+            Console.WriteLine($"Retrieved message id {msg.RequestID}");
 
-            var from = int.Parse(messageMatch.Groups["from"].Value);
-            var to = int.Parse(messageMatch.Groups["to"].Value);
-
-            if (from > to)
-            {
-                Console.WriteLine($"'{message}' is not a valid integer range. First value must be less or equal than second.");
-                return;
-            }
-
+            // delete message from queue
             await queue.DeleteMessageAsync(queueMessage);
 
-            Parallel.For(from, to + 1, (i) =>
-              {
-                  try
-                  {
-                      Console.WriteLine($"Computing {i}!");
-                      var result = CalculateFactorial(i);
-                      Console.WriteLine($"{i}!={result}.");
-                  }
-                  catch (Exception ex)
-                  {
-                      Console.WriteLine(ex.Message);
-                  }
-              });
+            // lets do some *slightly* intensive processing
+            ProcessMessage(msg);
 
-        }
-
-        private static Decimal CalculateFactorial(Decimal i)
-        {
-            if (i > 1)
+            void ProcessMessage(RequestMessage message)
             {
-                return CalculateFactorial(i - 1) * i;
+                Parallel.For(0, msg.Count + 1, (i) =>
+                {
+                    try
+                    {
+                        Console.WriteLine($"Computing {i}!");
+                        var result = CalculateFactorial(i);
+                        Console.WriteLine($"{i}!={result}.");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                });
             }
-            else
+
+            decimal CalculateFactorial(decimal i)
             {
-                return 1;
+                if (i > 1)
+                    return CalculateFactorial(i - 1) * i;
+                else
+                    return 1;
             }
         }
-
     }
 }
